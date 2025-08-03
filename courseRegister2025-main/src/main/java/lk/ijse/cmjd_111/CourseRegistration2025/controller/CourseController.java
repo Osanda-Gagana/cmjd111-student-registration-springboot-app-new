@@ -8,12 +8,14 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.List;
 
 @RestController
 @RequestMapping(value = "course")
 @RequiredArgsConstructor
+@Slf4j
 public  class CourseController {
 private final CourseService courseService;
     @PostMapping(
@@ -26,10 +28,12 @@ private final CourseService courseService;
 
     @GetMapping(value = "{courseId}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<CourseDTO> getSelectedCourse(@PathVariable String courseId) {
+        log.info("Selected course ID is: {}", courseId);
         if (courseId == null) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
         try {
+            log.info("Get selected courses are {}",courseService.getSelectedCourse(courseId));
             return new ResponseEntity<>(courseService.getSelectedCourse(courseId), HttpStatus.OK);
         } catch (Exception ex) {
             ex.printStackTrace();
